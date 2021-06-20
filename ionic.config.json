@@ -1,0 +1,7 @@
+{
+  "name": "app-workandmeet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
