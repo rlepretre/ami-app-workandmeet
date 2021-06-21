@@ -4,6 +4,12 @@ import router from './router';
 
 import { IonicVue } from '@ionic/vue';
 
+// Above the createApp() line
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+
+// Call the element loader after the platform has been bootstrapped
+defineCustomElements(window);
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
@@ -22,9 +28,27 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import firebase from 'firebase';
+
+
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyA5DWw8_gbvTHx5r7gSUQSqaDvy_G3wGAg",
+  authDomain: "app-workandmeet.firebaseapp.com",
+  projectId: "app-workandmeet",
+  storageBucket: "app-workandmeet.appspot.com",
+  messagingSenderId: "1078151248497",
+  appId: "1:1078151248497:web:ddde155cc5deedf7d1f9d0",
+  measurementId: "G-S19DP7K8LX"
+};
+
+firebase.initializeApp(firebaseConfig)
 
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue,{
+    mode: "ios",
+  })
   .use(router);
   
 router.isReady().then(() => {

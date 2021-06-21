@@ -1,11 +1,20 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import Tabs from '../views/Tabs.vue'
+import Tabs from '../views/Tabs.vue';
+
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/tab1'
+    redirect: '/tabs/explore'
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/Login.vue')
+  },
+  {
+    path: '/register',
+    component: () => import('@/views/Register.vue')
   },
   {
     path: '/tabs/',
@@ -13,20 +22,47 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        redirect: '/tabs/tab1'
+        redirect: '/tabs/explore'
       },
       {
-        path: 'tab1',
-        component: () => import('@/views/Tab1.vue')
+        path: 'create-workspace',
+        component: () => import('@/views/CreateWorkspace/GeneralInfo.vue')
       },
       {
-        path: 'tab2',
-        component: () => import('@/views/Tab2.vue')
+        path: 'features',
+        name: 'Features',
+        component: () => import('@/views/CreateWorkspace/Features.vue')
       },
       {
-        path: 'tab3',
-        component: () => import('@/views/Tab3.vue')
-      }
+        path: 'add-pictures',
+        name: 'AddPictures',
+        component: () => import('@/views/CreateWorkspace/AddPictures.vue')
+      },
+      {
+        path: 'add-dispo',
+        name: 'AddDispo',
+        component: () => import('@/views/CreateWorkspace/AddDisponibilities.vue')
+      },
+      {
+        path: 'explore',
+        component: () => import('@/views/Explore.vue')
+      },
+      {
+        path: 'map',
+        component: () => import('@/views/Map.vue')
+      },
+      {
+        path: 'mybooking',
+        component: () => import('@/views/MyBookings.vue')
+      }, {
+        path: 'myworkspaces',
+        component: () => import('@/views/MyWorkspaces.vue')
+      },
+      {
+        path: 'profile',
+        component: () => import('@/views/Profile.vue')
+      },
+      
     ]
   }
 ]
