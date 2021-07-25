@@ -17,6 +17,18 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Register.vue')
   },
   {
+    name: "NewBooking",
+    path: '/workspace/:id/booking',
+    props: true,
+    component: () => import('@/views/NewBooking.vue')
+  },
+  {
+    name: "Workspace",
+    path: '/workspace/:id',
+    props: true,
+    component: () => import('@/views/Workspace.vue')
+  },
+  {
     path: '/tabs/',
     component: Tabs,
     children: [
@@ -52,7 +64,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Map.vue')
       },
       {
-        path: 'mybooking',
+        name : 'MyBookings',
+        path: 'mybookings',
         component: () => import('@/views/MyBookings.vue')
       }, {
         path: 'myworkspaces',
@@ -61,8 +74,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'profile',
         component: () => import('@/views/Profile.vue')
-      },
-      
+      },      
     ]
   }
 ]

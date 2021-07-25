@@ -126,7 +126,7 @@ export default {
     const state = reactive({
       power: false,
       wifi: false,
-      coffe: false,
+      coffee: false,
       parking: false,
       wc: false
     });

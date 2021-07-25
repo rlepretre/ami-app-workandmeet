@@ -29,7 +29,7 @@
         picture</ion-button
       >
       <ion-button
-        :router-link="{name: 'AddDispo', params: {id: docRefId}}"
+        @click="next"
         color="primary"
         class="ion-margin fixed-bot-two"
         expand="block"
@@ -92,6 +92,10 @@ export default {
 
     const { photos, takePhoto } = usePhotoGallery(docRefId);
 
+    const next = () => {
+        router.push({ name: "AddDispo", params: { id: docRefId } });
+    }
+
     const cancel = () => {
       if (!docRefId) {
         router.push("/tabs/myworkspaces");
@@ -114,6 +118,7 @@ export default {
       photos,
       cancel,
       takePhoto,
+      next,
       camera,
       trash,
       close

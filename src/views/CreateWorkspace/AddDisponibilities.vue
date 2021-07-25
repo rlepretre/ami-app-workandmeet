@@ -6,65 +6,57 @@
           <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-title class="ion-text-center">Add your workspace</ion-title>
-        <ion-progress-bar value="0.40"></ion-progress-bar>
+        <ion-progress-bar :value="progress"></ion-progress-bar>
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <h1 class="ion-margin-start">Add disponibilities</h1>
       <form @submit.prevent="next(power, wifi, coffee, parking, wc)">
-        <ion-list>
-          <ion-item>
-            <ion-icon
-              slot="start"
-              color="primary"
-              :icon="batteryChargingOutline"
-            ></ion-icon>
-            <ion-label>Available power plugs</ion-label>
-            <ion-toggle v-model="power"></ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon
-              slot="start"
-              color="primary"
-              :icon="wifiOutline"
-            ></ion-icon>
-            <ion-label>Available wifi</ion-label>
-            <ion-toggle v-model="wifi"></ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon
-              slot="start"
-              color="primary"
-              :icon="cafeOutline"
-            ></ion-icon>
-            <ion-label>Coffee machine</ion-label>
-            <ion-toggle v-model="coffee"></ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon
-              slot="start"
-              color="primary"
-              :icon="carOutline"
-            ></ion-icon>
-            <ion-label>Free parking</ion-label>
-            <ion-toggle v-model="parking"></ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-icon
-              slot="start"
-              color="primary"
-              :icon="manOutline"
-            ></ion-icon>
-            <ion-label>Restrooms</ion-label>
-            <ion-toggle v-model="wc"></ion-toggle>
-          </ion-item>
-        </ion-list>
+        <div :key="dispo.id" v-for="dispo in dispos">
+          <ion-grid class="ion-margin-top">
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label color="primary">Day of the week</ion-label>
+                  <ion-select v-model="dispo.dayOfTheWeek">
+                    <ion-select-option
+                      :value="weekday"
+                      v-for="weekday in weekdays"
+                      :key="weekday"
+                      >{{ weekday }}</ion-select-option
+                    >
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label color="primary">Start</ion-label>
+                  <ion-datetime
+                    v-model="dispo.start"
+                    display-format="HH:mm"
+                  ></ion-datetime>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label color="primary">End</ion-label>
+                  <ion-datetime
+                    v-model="dispo.end"
+                    display-format="HH:mm"
+                  ></ion-datetime>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
         <ion-button
           type="submit"
           class="ion-margin"
           expand="block"
           shape="round"
-          >Next</ion-button
+          >Confirm creation</ion-button
         >
       </form>
       <ion-button
@@ -75,19 +67,18 @@
         shape="round"
         >Cancel</ion-button
       >
+      <ion-modal
+        :is-open="isOpenRef"
+        css-class="my-custom-class"
+        @didDismiss="setOpen(false)"
+      >
+        <MyModal :data="data"></MyModal>
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import {
-  batteryChargingOutline,
-  wifiOutline,
-  cafeOutline,
-  manOutline,
-  womanOutline,
-  carOutline
-} from "ionicons/icons";
 import {
   IonPage,
   IonHeader,
@@ -96,12 +87,21 @@ import {
   IonContent,
   IonBackButton,
   IonButton,
-  IonToggle
+  IonDatetime,
+  IonSelect,
+  IonSelectOption
 } from "@ionic/vue";
-import { reactive } from "@vue/reactivity";
-import { toRefs } from "vue";
+import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import firebase from "firebase";
+
+export interface Disponibility {
+  id: number;
+  dayOfTheWeek: string;
+  start: string;
+  end: string;
+  workspace: string;
+}
 
 export default {
   name: "CreateWorkspace",
@@ -113,55 +113,86 @@ export default {
     IonPage,
     IonBackButton,
     IonButton,
-    IonToggle
+    IonDatetime,
+    IonSelect,
+    IonSelectOption
   },
 
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const progress = ref(0.8);
+
+    const weekdays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ];
+
+    const dispos = ref<Disponibility[]>([
+      {
+        id : 0,
+        dayOfTheWeek: "Monday",
+        start: "08:00",
+        end: "17:00",
+        workspace: ""
+      },
+      {
+        id : 1,
+        dayOfTheWeek: "Tuesday",
+        start: "08:00",
+        end: "17:00",
+        workspace: ""
+      },
+      {
+        id : 2,
+        dayOfTheWeek: "Wednesday",
+        start: "08:00",
+        end: "17:00",
+        workspace: ""
+      },
+      {
+        id : 3,
+        dayOfTheWeek: "Thursday",
+        start: "08:00",
+        end: "17:00",
+        workspace: ""
+      },
+      {
+        id : 4,
+        dayOfTheWeek: "Friday",
+        start: "08:00",
+        end: "17:00",
+        workspace: ""
+      }
+    ]);
 
     const docRefId = "" + route.params.id;
-    console.log("the ref is " + docRefId);
+    console.log("my ref id is dispo" + docRefId);
 
-    const state = reactive({
-      power: false,
-      wifi: false,
-      coffe: false,
-      parking: false,
-      wc: false
-    });
-
-    const next = (
-      power: boolean,
-      wifi: boolean,
-      coffee: boolean,
-      parking: boolean,
-      wc: boolean
-    ) => {
+    const next = () => {
       console.log(route.params.id);
       console.log(docRefId);
-
-      firebase
-        .firestore()
-        .collection("workspaces")
-        .doc(docRefId)
-        .set(
-          {
-            power,
-            wifi,
-            coffee,
-            parking,
-            wc
-          },
-          { merge: true }
-        )
-        .then(() => {
-          console.log("Document written with ID: ", docRefId);
-          router.push({ name: "AddPictures", params: { id: docRefId } });
-        })
-        .catch(function(error) {
-          console.error("Error adding document: ", error);
-        });
+      console.log(dispos);
+      dispos.value.forEach(dispo => {
+        dispo.workspace = docRefId;
+        firebase
+          .firestore()
+          .collection("dispos")
+          .add(dispo)
+          .then(() => {
+            console.log("Document written with ID: ", docRefId);
+            progress.value = 1;
+            router.push("/tabs/myworkspaces");
+          })
+          .catch(function(error) {
+            console.error("Error adding document: ", error);
+          });
+      });
     };
 
     const cancel = () => {
@@ -182,15 +213,11 @@ export default {
       }
     };
     return {
-      ...toRefs(state),
+      progress,
+      dispos,
+      weekdays,
       next,
-      cancel,
-      batteryChargingOutline,
-      wifiOutline,
-      cafeOutline,
-      manOutline,
-      womanOutline,
-      carOutline
+      cancel
     };
   }
 };

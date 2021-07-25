@@ -34,6 +34,7 @@
         class="ion-margin"
         shape="round"
         expand="block"
+        disabled
       >
         <ion-icon color="danger" slot="start" :icon="logoGoogle"></ion-icon>Sign
         in with Google</ion-button
@@ -43,6 +44,7 @@
         class="ion-margin"
         shape="round"
         expand="block"
+        disabled
       >
         <ion-icon slot="start" :icon="logoFacebook"></ion-icon>Sign in with
         Facebook</ion-button
@@ -53,6 +55,7 @@
         shape="round"
         expand="block"
         router-link="/register"
+        disabled
       >
         <ion-icon color="dark" slot="start" :icon="logoApple"></ion-icon>Sign in
         with Apple</ion-button

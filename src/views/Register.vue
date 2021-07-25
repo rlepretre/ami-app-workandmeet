@@ -78,6 +78,7 @@
         class="ion-margin"
         shape="round"
         expand="block"
+        disabled
       >
         <ion-icon color="danger" slot="start" :icon="logoGoogle"></ion-icon>Sign
         up with Google</ion-button
@@ -87,6 +88,7 @@
         class="ion-margin"
         shape="round"
         expand="block"
+        disabled
       >
         <ion-icon slot="start" :icon="logoFacebook"></ion-icon>Sign up with
         Facebook</ion-button
@@ -96,6 +98,7 @@
         class="ion-margin"
         shape="round"
         expand="block"
+        disabled
       >
         <ion-icon color="dark" slot="start" :icon="logoApple"></ion-icon>Sign up
         with Apple</ion-button
@@ -160,9 +163,13 @@ export default {
       try {
         if (!firstname || !name || !email || !password) {
           state.errorMsg = "Name, Email, and Password Required";
+          console.log("Name, Email, and Password Required");
+          
           return;
         } else if (password != passwordConfirmation) {
           state.errorMsg = "Passwords do not match"
+          console.log("password do not match");
+          
         }
         const authRes = await firebase
           .auth()

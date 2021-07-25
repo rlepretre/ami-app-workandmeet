@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "app-workandmeet",
+	"webDir": "public",
+	"bundledWebRuntime": false
+}

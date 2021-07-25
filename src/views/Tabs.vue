@@ -7,7 +7,7 @@
           <ion-label>Explore</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="map" href="/tabs/map">
+        <ion-tab-button disabled tab="map" href="/tabs/map">
           <ion-icon :icon="mapOutline" />
           <ion-label>Map</ion-label>
         </ion-tab-button>

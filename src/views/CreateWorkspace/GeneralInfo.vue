@@ -12,9 +12,7 @@
     <ion-content>
       <h1 class="ion-margin-start">General informations</h1>
       <form
-        @submit.prevent="
-          next(name, phone, address, price, spots, description)
-        "
+        @submit.prevent="next(name, phone, address, price, spots, description)"
       >
         <ion-item>
           <ion-label color="primary" position="floating">Place name</ion-label>
@@ -103,7 +101,7 @@ export default {
   setup() {
     const router = useRouter();
 
-    let docRefId = '';
+    let docRefId = "";
 
     const state = reactive({
       name: "",
@@ -114,7 +112,7 @@ export default {
       description: ""
     });
 
-    const next = (
+    const next = async (
       name: string,
       phone: string,
       address: string,
@@ -122,7 +120,7 @@ export default {
       spots: number,
       description: string
     ) => {
-      console.log(state);
+      const userId = await firebase.auth().currentUser?.uid;
       firebase
         .firestore()
         .collection("workspaces")
@@ -132,12 +130,13 @@ export default {
           address,
           price,
           spots,
-          description
+          description,
+          userId
         })
         .then(function(docRef) {
           console.log("Document written with ID: ", docRef.id);
-          docRefId = docRef.id
-          router.push({name: 'Features', params: {id: docRef.id}})
+          docRefId = docRef.id;
+          router.push({ name: "Features", params: { id: docRef.id } });
         })
         .catch(function(error) {
           console.error("Error adding document: ", error);
@@ -145,24 +144,26 @@ export default {
     };
 
     const cancel = () => {
-      if(!docRefId){
-        router.push('/tabs/myworkspaces')
+      if (!docRefId) {
+        router.push("/tabs/myworkspaces");
       } else {
-        firebase.firestore().collection('workspaces').doc(docRefId)
-        .delete()
-        .then(() =>{
-          router.push('/tabs/myworkspaces')
-        })
-        .catch(function(error) {
-          console.error("Error deleting document: ", error);
-        });
+        firebase
+          .firestore()
+          .collection("workspaces")
+          .doc(docRefId)
+          .delete()
+          .then(() => {
+            router.push("/tabs/myworkspaces");
+          })
+          .catch(function(error) {
+            console.error("Error deleting document: ", error);
+          });
       }
-
-    }
+    };
     return {
       ...toRefs(state),
       next,
-      cancel,
+      cancel
     };
   }
 };
