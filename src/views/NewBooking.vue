@@ -36,8 +36,8 @@
           <ion-label>Start Time</ion-label>
           <ion-datetime
             @ionChange="computePrice(workspace.price)"
-            display-format="h:mm A"
-            picker-format="h:mm A"
+            display-format="HH:mm"
+            picker-format="HH:mm"
             v-model="start"
           ></ion-datetime>
         </ion-item>
@@ -45,8 +45,8 @@
           <ion-label>Ending Time</ion-label>
           <ion-datetime
             @ionChange="computePrice(workspace.price)"
-            display-format="h:mm A"
-            picker-format="h:mm A"
+            display-format="HH:mm"
+            picker-format="HH:mm"
             v-model="end"
           ></ion-datetime>
         </ion-item>

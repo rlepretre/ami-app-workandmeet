@@ -1,9 +1,9 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'be.workandmeet.app',
   appName: 'app-workandmeet',
-  webDir: 'public',
+  webDir: 'dist',
   bundledWebRuntime: false
 };
 
